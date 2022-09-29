@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { useState } from 'react';
 import styles from '../styles/Home.module.css'
 
 
@@ -14,6 +15,8 @@ interface SearchCatImage {
 // NextPage -> type, line it;s imported from next 
 const Home: NextPage = () => {
 
+  const [catImageUrl, setCatImageUrl] = useState('');
+
   const fetchCatImage = async (): Promise<SearchCatImage> => {
     const res = await fetch('https://api.thecatapi.com/v1/images/search?limit=1');
     const result = await res.json();
@@ -23,7 +26,7 @@ const Home: NextPage = () => {
 
   const handleClick = async () => {
     const catImage = await fetchCatImage();
-    console.log(catImage.url);
+    setCatImageUrl(catImage.url);
   }
 
   return (
@@ -34,7 +37,7 @@ const Home: NextPage = () => {
       height: '100vh',
     }}>
       <h1>Cat images</h1>
-      <img src='https://cdn2.thecatapi.com/images/0XYvRd7oD.jpg' width={500} height={'auto'} />
+      <img src={catImageUrl} width={500} height={'auto'} />
       <button onClick={handleClick}>Cat</button>
     </div>
   )
