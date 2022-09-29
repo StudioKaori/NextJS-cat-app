@@ -3,10 +3,18 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
+
+interface SearchCatImage {
+  id: string;
+  url: string;
+  width: number;
+  height: number;
+}
+
 // NextPage -> type, line it;s imported from next 
 const Home: NextPage = () => {
 
-  const fetchCatImage = async () => {
+  const fetchCatImage = async (): Promise<SearchCatImage> => {
     const res = await fetch('https://api.thecatapi.com/v1/images/search?limit=1');
     const result = await res.json();
     //console.log(result[0]);
