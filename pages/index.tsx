@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useState } from 'react';
 import styles from '../styles/Home.module.css'
 import 'semantic-ui-css/semantic.min.css'
+import { Loader } from 'semantic-ui-react'
 
 // SSG Static site generator 静的生成、ビルドした時に既にデータを用意。読み込み早い。非同期通信にはしようできない。
 // SSR server side props リクエストごとに生成。今回はこちらを使用。
@@ -31,10 +32,13 @@ const fetchCatImage = async (): Promise<SearchCatImage> => {
 const Home: NextPage<IndexPageProps> = ({initialCatImageUrl}) => {
 
   const [catImageUrl, setCatImageUrl] = useState(initialCatImageUrl);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = async () => {
+    setIsLoading(true);
     const catImage = await fetchCatImage();
     setCatImageUrl(catImage.url);
+    setIsLoading(false);
   };
 
   return (
@@ -45,7 +49,10 @@ const Home: NextPage<IndexPageProps> = ({initialCatImageUrl}) => {
       height: '100vh',
     }}>
       <h1>Cat images</h1>
-      <img src={catImageUrl} width={500} height={'auto'} />
+      
+      {isLoading ? (<Loader active size='huge' />) : (
+        <img src={catImageUrl} width={500} height={'auto'} />
+      )}
       <button onClick={handleClick}>Cat</button>
     </div>
   )
